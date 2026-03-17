@@ -314,7 +314,7 @@ def show_status_dialog() -> None:
                     </tr>
                     <tr>
                         <td>Meeting scheduling and availability confirmation</td>
-                        <td>High-priority clients and 4 clients to confirm their availability</td>
+                        <td>3 clients - SDDS, GH Group and Sesiro confirmed their availability. GH Group session is set on 24 March 2026. Sesiro: request another potential date as management will not be around. SDDS: client proposed 07 or 14 April and waiting for management to confirm availability.</td>
                     </tr>
                 </tbody>
             </table>
