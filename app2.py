@@ -7,7 +7,7 @@ import pandas as pd
 import streamlit as st
 
 
-st.set_page_config(page_title="Mining War Room", layout="wide")
+st.set_page_config(page_title="Mining War Room Report", layout="wide")
 
 SECTIONS = [
     {
@@ -1989,7 +1989,7 @@ render_html(
     f'<div class="{intro_card_class}">'
     f"{logo_markup}"
     f'<div class="intro-copy">'
-    f"<h1>Mining War Room</h1>"
+    f"<h1>Mining War Room Report</h1>"
     f'<div class="intro-divider"></div>'
     f'<div class="intro-pill-row">'
     f'<span class="intro-pill">Client Engagement</span>'
