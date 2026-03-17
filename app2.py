@@ -12,7 +12,7 @@ st.set_page_config(page_title="Mining War Room", layout="wide")
 SECTIONS = [
     {
         "id": "engagement",
-        "title": "Client Engagement:\nGreet & Meet\nSessions",
+        "title": "Client Engagements",
         "summary": "Client engagement strategy, current status, client service plan, and action priorities.",
         "content": [
             ("Strategic Objectives", [
@@ -160,7 +160,6 @@ PIPELINE_LEADS_TABLE = [
         "client": "Tataki Mining",
         "income": "TBD",
         "comments": "Trying to find new contacts following a change in management from 2025.",
-        "progress": "Work in progress",
         "estimated_placement": "TBD",
         "responsible_person": "Tirelo",
     },
@@ -168,7 +167,6 @@ PIPELINE_LEADS_TABLE = [
         "client": "Sesiro/Debswana Assets",
         "income": "TBD",
         "comments": "Minet to provide alternate solutions outside of the Anglo-Coromin arrangement.",
-        "progress": "Quotes to be presented in March",
         "estimated_placement": "TBD",
         "responsible_person": "Tirelo",
     },
@@ -176,7 +174,6 @@ PIPELINE_LEADS_TABLE = [
         "client": "Lucara",
         "income": "TBD",
         "comments": "Engaging CEO and CFO.",
-        "progress": "Work in progress",
         "estimated_placement": "TBD",
         "responsible_person": "Tirelo",
     },
@@ -184,7 +181,6 @@ PIPELINE_LEADS_TABLE = [
         "client": "Maatla Resources",
         "income": "TBD",
         "comments": "Lombard and BECI to present the policy wording to the Director of the Department of Mines for approval.",
-        "progress": "Work in progress",
         "estimated_placement": "TBD",
         "responsible_person": "Tshwarelo/Tirelo",
     },
@@ -192,7 +188,6 @@ PIPELINE_LEADS_TABLE = [
         "client": "Solex Power",
         "income": "TBD",
         "comments": "Looking to meet the project owners during the week starting 09/03.",
-        "progress": "Set up another meeting",
         "estimated_placement": "TBD",
         "responsible_person": "Tirelo",
     },
@@ -200,7 +195,6 @@ PIPELINE_LEADS_TABLE = [
         "client": "Debswana Healthcare",
         "income": "TBD",
         "comments": "Healthcare solutions have been presented to the Debswana Wellness Fund.",
-        "progress": "Work in progress",
         "estimated_placement": "TBD",
         "responsible_person": "Tirelo",
     },
@@ -208,7 +202,6 @@ PIPELINE_LEADS_TABLE = [
         "client": "Tardieu Botswana",
         "income": "TBD",
         "comments": "Client finalizing bank account setup for KYC submission.",
-        "progress": "Work in progress",
         "estimated_placement": "TBD",
         "responsible_person": "Tshwarelo/Tshenolo",
     },
@@ -216,7 +209,6 @@ PIPELINE_LEADS_TABLE = [
         "client": "Power Plant Engineers",
         "income": "TBD",
         "comments": "Terms approved and awaiting KYC submission to issue the invoices.",
-        "progress": "Work in progress; UBO submission challenges",
         "estimated_placement": "TBD",
         "responsible_person": "Tshenolo",
     },
@@ -224,7 +216,6 @@ PIPELINE_LEADS_TABLE = [
         "client": "Tau Freight Logistics",
         "income": "TBD",
         "comments": "Quotation shared with the client and still under review. Client is waiting for approval from CEDA.",
-        "progress": "Work in progress",
         "estimated_placement": "TBD",
         "responsible_person": "Tshenolo",
     },
@@ -232,7 +223,6 @@ PIPELINE_LEADS_TABLE = [
         "client": "Sandfire/Motheo Copper",
         "income": "TBD",
         "comments": "Gross sell from GLA. Awaiting introduction, engagement dates, and plan.",
-        "progress": "Work in progress",
         "estimated_placement": "TBD",
         "responsible_person": "Tirelo",
     },
@@ -240,7 +230,6 @@ PIPELINE_LEADS_TABLE = [
         "client": "Sesiro/JUP",
         "income": "TBD",
         "comments": "On track for August 2026.",
-        "progress": "Work in progress",
         "estimated_placement": "TBD",
         "responsible_person": "Tirelo",
     },
@@ -248,7 +237,6 @@ PIPELINE_LEADS_TABLE = [
         "client": "Mupane Gold Mining",
         "income": "TBD",
         "comments": "Before the Court of Appeal.",
-        "progress": "Work in progress",
         "estimated_placement": "TBD",
         "responsible_person": "Tirelo",
     },
@@ -478,7 +466,7 @@ def render_engagement_infographic(section: dict) -> None:
                 <div class="ring ring-three"></div>
                 <div class="ring ring-four"></div>
                 <div class="core-card">
-                    <h3>Client Engagement:<br>Greet &amp; Meet<br>Sessions</h3>
+                    <h3>Client Engagements</h3>
                 </div>
             </div>
             """
@@ -1337,7 +1325,6 @@ def render_pipeline_landscape(section: dict) -> None:
         columns = [
             ("client", "Client"),
             ("income", "Income"),
-            ("progress", "Progress"),
             ("estimated_placement", "Estimated Placement Dates"),
             ("comments", "Comments"),
             ("responsible_person", "Responsible Person"),
@@ -1357,7 +1344,6 @@ def render_pipeline_landscape(section: dict) -> None:
                         "Income",
                         help="Enter premium/fee or keep TBD.",
                     ),
-                    "progress": st.column_config.TextColumn("Progress"),
                     "estimated_placement": st.column_config.TextColumn(
                         "Estimated Placement Dates",
                         help="Enter date/time when available (e.g., 2026-03-21 14:00).",
@@ -1365,7 +1351,7 @@ def render_pipeline_landscape(section: dict) -> None:
                     "comments": st.column_config.TextColumn("Comments"),
                     "responsible_person": st.column_config.TextColumn("Responsible Person"),
                 },
-                disabled=["client", "progress", "comments", "responsible_person"],
+                disabled=["client", "comments", "responsible_person"],
                 height=420,
                 key="pipeline_editor",
             )
@@ -2046,3 +2032,4 @@ else:
         if st.button("Next", type="tertiary", disabled=current_index == len(SECTION_ORDER) - 1):
             st.session_state.selected_section = SECTION_ORDER[current_index + 1]
             st.rerun()
+
