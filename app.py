@@ -7,7 +7,7 @@ import pandas as pd
 import streamlit as st
 
 
-st.set_page_config(page_title="Mining War Room", layout="wide")
+st.set_page_config(page_title="Mining War Room Presentation", layout="wide")
 
 SECTIONS = [
     {
