@@ -7,23 +7,18 @@ import pandas as pd
 import streamlit as st
 
 
-st.set_page_config(page_title="Mining War Room Presentation", layout="wide")
+st.set_page_config(page_title="Mining War Room Report", layout="wide")
 
 SECTIONS = [
     {
         "id": "engagement",
-        "title": "Client Engagement:\nGreet & Meet\nSessions",
-        "summary": "Client engagement strategy, current status, client service plan, and action priorities.",
+        "title": "Client Engagements",
+        "summary": "Client engagement strategy, client service plan, and action priorities.",
         "content": [
             ("Strategic Objectives", [
                 "Alignment: ensure services remain relevant to client operational needs.",
                 "Retention: reinforce our value proposition.",
                 "Growth: identify untapped opportunities where services can add value.",
-            ]),
-            ("Current Engagement Status", [
-                "Initial Requests Sent: Completed (26 Feb 2026).",
-                "Waiting for Response: Remaining clients - 13.",
-                "Meeting scheduling and availability confirmation: High-priority clients and 4 clients to confirm their availability.",
             ]),
             ("Client Service Plan", [
                 "Initial invitation sent to 17 clients.",
@@ -95,21 +90,145 @@ SECTION_ORDER = [section["id"] for section in SECTIONS]
 
 
 ENGAGEMENT_COLORS = ["#111111", "#c1121f", "#2b2b2b", "#e5383b"]
+OUTREACH_COLUMNS = [
+    "Client",
+    "Activity",
+    "Invitation Date",
+    "Activity Date",
+    "Cross Selling",
+    "Status",
+]
+TRAINING_TABLE_COLUMNS = [
+    "Client",
+    "Income",
+    "Invitation Date",
+    "Proposed Training Date",
+    "Status",
+]
+PIPELINE_COLUMNS = [
+    "client",
+    "income",
+    "estimated_placement",
+    "comments",
+    "responsible_person",
+]
+DATA_DIR = Path("data")
+OUTREACH_DATA_PATH = DATA_DIR / "outreach_table.csv"
+TRAINING_DATA_PATH = DATA_DIR / "training_table.csv"
+PIPELINE_DATA_PATH = DATA_DIR / "pipeline_table.csv"
 OUTREACH_STATUS = [
-    {"Client": "Redpath", "Status": "Complete"},
-    {"Client": "Okavango Diamond", "Status": "OK"},
-    {"Client": "BotAsh", "Status": "Complete"},
-    {"Client": "Letshego Africa", "Status": "Complete"},
-    {"Client": "Air Liquide", "Status": "Take action urgently"},
-    {"Client": "Botswana Oxygen", "Status": "Warning"},
-    {"Client": "Final Energy Botswana", "Status": "OK"},
-    {"Client": "Francistown Academic Hospital", "Status": "Take action urgently"},
-    {"Client": "GH Group", "Status": "Warning"},
-    {"Client": "Genesis HB Botswana", "Status": "Complete"},
-    {"Client": "Mitchell Drilling Services", "Status": "Warning"},
-    {"Client": "Minergy", "Status": "OK"},
-    {"Client": "SDDS", "Status": "OK"},
-    {"Client": "BG Motors", "Status": "Complete"},
+    {
+        "Client": "Redpath",
+        "Activity": "Initial invitation",
+        "Invitation Date": "26 Feb 2026",
+        "Activity Date": "",
+        "Cross Selling": "",
+        "Status": "Complete",
+    },
+    {
+        "Client": "Okavango Diamond",
+        "Activity": "Initial invitation",
+        "Invitation Date": "26 Feb 2026",
+        "Activity Date": "",
+        "Cross Selling": "",
+        "Status": "OK",
+    },
+    {
+        "Client": "BotAsh",
+        "Activity": "Initial invitation",
+        "Invitation Date": "26 Feb 2026",
+        "Activity Date": "",
+        "Cross Selling": "",
+        "Status": "Complete",
+    },
+    {
+        "Client": "Letshego Africa",
+        "Activity": "Initial invitation",
+        "Invitation Date": "26 Feb 2026",
+        "Activity Date": "",
+        "Cross Selling": "",
+        "Status": "Complete",
+    },
+    {
+        "Client": "Air Liquide",
+        "Activity": "Initial invitation",
+        "Invitation Date": "26 Feb 2026",
+        "Activity Date": "",
+        "Cross Selling": "",
+        "Status": "Take action urgently",
+    },
+    {
+        "Client": "Botswana Oxygen",
+        "Activity": "Initial invitation",
+        "Invitation Date": "26 Feb 2026",
+        "Activity Date": "",
+        "Cross Selling": "",
+        "Status": "Warning",
+    },
+    {
+        "Client": "Final Energy Botswana",
+        "Activity": "Initial invitation",
+        "Invitation Date": "26 Feb 2026",
+        "Activity Date": "",
+        "Cross Selling": "",
+        "Status": "OK",
+    },
+    {
+        "Client": "Francistown Academic Hospital",
+        "Activity": "Initial invitation",
+        "Invitation Date": "26 Feb 2026",
+        "Activity Date": "",
+        "Cross Selling": "",
+        "Status": "Take action urgently",
+    },
+    {
+        "Client": "GH Group",
+        "Activity": "Initial invitation",
+        "Invitation Date": "26 Feb 2026",
+        "Activity Date": "",
+        "Cross Selling": "",
+        "Status": "Warning",
+    },
+    {
+        "Client": "Genesis HB Botswana",
+        "Activity": "Initial invitation",
+        "Invitation Date": "26 Feb 2026",
+        "Activity Date": "",
+        "Cross Selling": "",
+        "Status": "Complete",
+    },
+    {
+        "Client": "Mitchell Drilling Services",
+        "Activity": "Initial invitation",
+        "Invitation Date": "26 Feb 2026",
+        "Activity Date": "",
+        "Cross Selling": "",
+        "Status": "Warning",
+    },
+    {
+        "Client": "Minergy",
+        "Activity": "Initial invitation",
+        "Invitation Date": "26 Feb 2026",
+        "Activity Date": "",
+        "Cross Selling": "",
+        "Status": "OK",
+    },
+    {
+        "Client": "SDDS",
+        "Activity": "Initial invitation",
+        "Invitation Date": "26 Feb 2026",
+        "Activity Date": "",
+        "Cross Selling": "",
+        "Status": "OK",
+    },
+    {
+        "Client": "BG Motors",
+        "Activity": "Initial invitation",
+        "Invitation Date": "26 Feb 2026",
+        "Activity Date": "",
+        "Cross Selling": "",
+        "Status": "Complete",
+    },
 ]
 ENGAGEMENT_ACTION_ITEMS = [
     "Implement a 14-day follow-up communication cycle.",
@@ -135,113 +254,223 @@ TRAINING_CONTINUATION_STEPS = [
     },
     {
         "step": "Verification",
-        "action": "Evaluate effectiveness and learning outcomes.",
+        "action": "Evaluate effectiveness and learning outcomes through questionnaires.",
     },
+]
+TRAINING_CLIENT_LIST = [
+    "Redpath",
+    "Okavango Diamond",
+    "BotAsh",
+    "Letshego Africa",
+    "Air Liquide",
+    "Botswana Oxygen",
+    "Jindal Energy Botswana",
+    "Francistown Academic Hospital",
+    "GH Group",
+    "Genesis HB Botswana",
+    "Mitchell Drilling Services",
+    "Minergy",
+    "SDDS",
+    "BB Motors",
+    "Presidential VIP Fleet",
+]
+TRAINING_CLIENT_TABLE = [
+    {
+        "Client": client,
+        "Income": "",
+        "Invitation Date": "",
+        "Proposed Training Date": "",
+        "Status": "",
+    }
+    for client in TRAINING_CLIENT_LIST
 ]
 PIPELINE_LEADS_TABLE = [
     {
         "client": "Tataki Mining",
-        "income": "TBD",
+        "income": "P297,000",
         "comments": "Trying to find new contacts following a change in management from 2025.",
-        "progress": "Work in progress",
-        "estimated_placement": "TBD",
+        "estimated_placement": "01/02/2026",
         "responsible_person": "Tirelo",
     },
     {
         "client": "Sesiro/Debswana Assets",
-        "income": "TBD",
+        "income": "P21,690,000",
         "comments": "Minet to provide alternate solutions outside of the Anglo-Coromin arrangement.",
-        "progress": "Quotes to be presented in March",
-        "estimated_placement": "TBD",
+        "estimated_placement": "01/07/2026",
         "responsible_person": "Tirelo",
     },
     {
         "client": "Lucara",
-        "income": "TBD",
+        "income": "P2,531,000",
         "comments": "Engaging CEO and CFO.",
-        "progress": "Work in progress",
-        "estimated_placement": "TBD",
+        "estimated_placement": "01/11/2026",
         "responsible_person": "Tirelo",
     },
     {
         "client": "Maatla Resources",
-        "income": "TBD",
+        "income": "P50,000",
         "comments": "Lombard and BECI to present the policy wording to the Director of the Department of Mines for approval.",
-        "progress": "Work in progress",
-        "estimated_placement": "TBD",
+        "estimated_placement": "01/06/2026",
         "responsible_person": "Tshwarelo/Tirelo",
     },
     {
         "client": "Solex Power",
-        "income": "TBD",
+        "income": "P1,700,000",
         "comments": "Looking to meet the project owners during the week starting 09/03.",
-        "progress": "Set up another meeting",
-        "estimated_placement": "TBD",
+        "estimated_placement": "01/08/2026",
         "responsible_person": "Tirelo",
     },
     {
         "client": "Debswana Healthcare",
-        "income": "TBD",
+        "income": "P250,000",
         "comments": "Healthcare solutions have been presented to the Debswana Wellness Fund.",
-        "progress": "Work in progress",
-        "estimated_placement": "TBD",
+        "estimated_placement": "01/08/2026",
         "responsible_person": "Tirelo",
     },
     {
         "client": "Tardieu Botswana",
-        "income": "TBD",
+        "income": "P130,000",
         "comments": "Client finalizing bank account setup for KYC submission.",
-        "progress": "Work in progress",
-        "estimated_placement": "TBD",
+        "estimated_placement": "01/05/2026",
         "responsible_person": "Tshwarelo/Tshenolo",
     },
     {
         "client": "Power Plant Engineers",
-        "income": "TBD",
+        "income": "P5,745.60",
         "comments": "Terms approved and awaiting KYC submission to issue the invoices.",
-        "progress": "Work in progress; UBO submission challenges",
-        "estimated_placement": "TBD",
+        "estimated_placement": "01/05/2026",
         "responsible_person": "Tshenolo",
     },
     {
         "client": "Tau Freight Logistics",
-        "income": "TBD",
+        "income": "P100,000",
         "comments": "Quotation shared with the client and still under review. Client is waiting for approval from CEDA.",
-        "progress": "Work in progress",
-        "estimated_placement": "TBD",
+        "estimated_placement": "01/05/2025",
         "responsible_person": "Tshenolo",
     },
     {
         "client": "Sandfire/Motheo Copper",
-        "income": "TBD",
+        "income": "P50,000",
         "comments": "Gross sell from GLA. Awaiting introduction, engagement dates, and plan.",
-        "progress": "Work in progress",
-        "estimated_placement": "TBD",
+        "estimated_placement": "01/07/2026",
         "responsible_person": "Tirelo",
     },
     {
         "client": "Sesiro/JUP",
-        "income": "TBD",
+        "income": "P1,000,000",
         "comments": "On track for August 2026.",
-        "progress": "Work in progress",
-        "estimated_placement": "TBD",
+        "estimated_placement": "01/08/2026",
         "responsible_person": "Tirelo",
     },
     {
         "client": "Mupane Gold Mining",
-        "income": "TBD",
+        "income": "P750,000",
         "comments": "Before the Court of Appeal.",
-        "progress": "Work in progress",
-        "estimated_placement": "TBD",
+        "estimated_placement": "01/08/2026",
         "responsible_person": "Tirelo",
     },
 ]
 
 
-def get_pipeline_table() -> list[dict]:
+def normalize_table(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
+    normalized = df.copy()
+    for column in columns:
+        if column not in normalized.columns:
+            normalized[column] = ""
+    return normalized[columns].fillna("")
+
+
+def load_table(file_path: Path, default_rows: list[dict], columns: list[str]) -> pd.DataFrame:
+    if file_path.exists():
+        try:
+            stored_df = pd.read_csv(file_path, dtype=str, keep_default_na=False)
+            return normalize_table(stored_df, columns)
+        except Exception:
+            pass
+    return normalize_table(pd.DataFrame(default_rows), columns)
+
+
+def save_table(df: pd.DataFrame, file_path: Path, columns: list[str]) -> pd.DataFrame:
+    normalized = normalize_table(df, columns)
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+    normalized.to_csv(file_path, index=False)
+    return normalized
+
+
+def restore_pipeline_defaults(df: pd.DataFrame) -> pd.DataFrame:
+    normalized = normalize_table(df, PIPELINE_COLUMNS)
+    default_df = normalize_table(pd.DataFrame(PIPELINE_LEADS_TABLE), PIPELINE_COLUMNS)
+    restored = normalized.copy()
+    default_aligned = default_df.reindex(restored.index).fillna("")
+
+    for column in ("client", "comments", "responsible_person"):
+        blank_values = restored[column].astype(str).str.strip().eq("")
+        restored.loc[blank_values, column] = default_aligned.loc[blank_values, column]
+
+    return restored
+
+
+def get_pipeline_table() -> pd.DataFrame:
     if "pipeline_table" not in st.session_state:
-        st.session_state.pipeline_table = [row.copy() for row in PIPELINE_LEADS_TABLE]
-    return st.session_state.pipeline_table
+        st.session_state.pipeline_table = load_table(
+            PIPELINE_DATA_PATH,
+            PIPELINE_LEADS_TABLE,
+            PIPELINE_COLUMNS,
+        )
+    pipeline_df = normalize_table(st.session_state.pipeline_table, PIPELINE_COLUMNS)
+    restored_df = restore_pipeline_defaults(pipeline_df)
+    if not restored_df.equals(pipeline_df):
+        for row_index, (_, original_row) in enumerate(pipeline_df.iterrows()):
+            for column in ("client", "comments", "responsible_person"):
+                restored_value = restored_df.iloc[row_index][column]
+                if (
+                    str(original_row[column]).strip() == ""
+                    and str(restored_value).strip() != ""
+                ):
+                    st.session_state[pipeline_cell_key(row_index, column)] = restored_value
+        st.session_state.pipeline_table = save_table(restored_df, PIPELINE_DATA_PATH, PIPELINE_COLUMNS)
+        return restored_df
+    return pipeline_df
+
+
+def get_outreach_table() -> pd.DataFrame:
+    if "outreach_table" not in st.session_state:
+        st.session_state.outreach_table = load_table(
+            OUTREACH_DATA_PATH,
+            OUTREACH_STATUS,
+            OUTREACH_COLUMNS,
+        )
+    return normalize_table(st.session_state.outreach_table, OUTREACH_COLUMNS)
+
+
+def get_training_table() -> pd.DataFrame:
+    if "training_table" not in st.session_state:
+        st.session_state.training_table = load_table(
+            TRAINING_DATA_PATH,
+            TRAINING_CLIENT_TABLE,
+            TRAINING_TABLE_COLUMNS,
+        )
+    return normalize_table(st.session_state.training_table, TRAINING_TABLE_COLUMNS)
+
+
+def persist_pipeline_table(df: pd.DataFrame) -> None:
+    st.session_state.pipeline_table = save_table(df, PIPELINE_DATA_PATH, PIPELINE_COLUMNS)
+
+
+def persist_outreach_table(df: pd.DataFrame) -> None:
+    st.session_state.outreach_table = save_table(df, OUTREACH_DATA_PATH, OUTREACH_COLUMNS)
+
+
+def persist_training_table(df: pd.DataFrame) -> None:
+    st.session_state.training_table = save_table(df, TRAINING_DATA_PATH, TRAINING_TABLE_COLUMNS)
+
+
+def training_cell_key(row_index: int, column_name: str) -> str:
+    return f"training_cell_{row_index}_{column_name.lower().replace(' ', '_')}"
+
+
+def pipeline_cell_key(row_index: int, column_name: str) -> str:
+    return f"pipeline_cell_{row_index}_{column_name.lower().replace(' ', '_')}"
 
 
 def load_image_base64(path: str) -> str:
@@ -273,46 +502,6 @@ def show_strategic_objectives_dialog() -> None:
                 Identify untapped opportunities where our services can add value.<br><br>
                 <strong>How:</strong> Explore additional ways to support client operations and business growth.
             </div>
-        </div>
-        """
-    )
-
-
-@st.dialog("Current Engagement Status")
-def show_status_dialog() -> None:
-    render_html(
-        """
-        <div class="status-table-wrap">
-            <div class="status-overview">
-                <div class="status-chip complete">1 Completed</div>
-                <div class="status-chip waiting">1 Waiting</div>
-                <div class="status-chip progress">1 In Progress</div>
-                <div class="status-bar">
-                    <div class="status-bar-fill"></div>
-                </div>
-            </div>
-            <table class="status-table-pretty">
-                <thead>
-                    <tr>
-                        <th>Outreach Phase</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Initial Requests Sent</td>
-                        <td>Completed (26 Feb 2026)</td>
-                    </tr>
-                    <tr>
-                        <td>Waiting for Response</td>
-                        <td>Remaining clients - 13</td>
-                    </tr>
-                    <tr>
-                        <td>Meeting scheduling and availability confirmation</td>
-                        <td>High-priority clients and 4 clients to confirm their availability</td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
         """
     )
@@ -359,7 +548,23 @@ def show_approach_dialog() -> None:
             if idx == 0:
                 with st.popover("View List", use_container_width=True):
                     st.markdown("**Initial invitation sent to 17 clients**")
-                    st.table(OUTREACH_STATUS)
+                    st.caption("Press Enter after editing a cell to save it. Your changes stay after a refresh.")
+                    edited_outreach = st.data_editor(
+                        get_outreach_table(),
+                        key="outreach_table_editor",
+                        use_container_width=True,
+                        hide_index=True,
+                        num_rows="dynamic",
+                        column_config={
+                            "Client": st.column_config.TextColumn("Client", width="medium"),
+                            "Activity": st.column_config.TextColumn("Activity", width="medium"),
+                            "Invitation Date": st.column_config.TextColumn("Invitation Date", width="small"),
+                            "Activity Date": st.column_config.TextColumn("Activity Date", width="small"),
+                            "Cross Selling": st.column_config.TextColumn("Cross Selling", width="medium"),
+                            "Status": st.column_config.TextColumn("Status", width="medium"),
+                        },
+                    )
+                    persist_outreach_table(edited_outreach)
             else:
                 st.empty()
 
@@ -461,7 +666,7 @@ def render_engagement_infographic(section: dict) -> None:
                 <div class="ring ring-three"></div>
                 <div class="ring ring-four"></div>
                 <div class="core-card">
-                    <h3>Client Engagement:<br>Greet &amp; Meet<br>Sessions</h3>
+                    <h3>Client Engagements</h3>
                 </div>
             </div>
             """
@@ -482,8 +687,6 @@ def render_engagement_infographic(section: dict) -> None:
                 if st.button(label, key=f"engagement-{idx}", use_container_width=True):
                     if heading == "Strategic Objectives":
                         show_strategic_objectives_dialog()
-                    elif heading == "Current Engagement Status":
-                        show_status_dialog()
                     elif heading == "Client Service Plan":
                         show_approach_dialog()
                     elif heading == "Action Plan":
@@ -542,7 +745,6 @@ def render_training_roadmap(section: dict) -> None:
         )
 
     continuation_html = "".join(continuation_markup)
-
     render_html(
         f"""
         <style>
@@ -795,6 +997,91 @@ def render_training_roadmap(section: dict) -> None:
                     max-width: none;
                 }}
             }}
+            .training-table-card {{
+                background: #ffffff;
+                border: 1px solid rgba(17, 17, 17, 0.12);
+                border-radius: 24px;
+                padding: 1.4rem 1.6rem;
+                box-shadow: 0 18px 32px rgba(17, 17, 17, 0.08);
+                margin-bottom: 0.8rem;
+            }}
+            .training-table-header {{
+                font-size: 1.2rem;
+                font-weight: 800;
+                color: #111111;
+                margin-bottom: 0.35rem;
+            }}
+            .training-table-caption {{
+                font-size: 0.95rem;
+                color: #4b4b4b;
+                margin-bottom: 0;
+            }}
+            .training-input-headcell {{
+                padding: 0 0.25rem 0.3rem;
+                color: #5b5b5b;
+                font-size: 0.88rem;
+                font-weight: 800;
+                letter-spacing: 0.02em;
+                margin-bottom: 0.02rem;
+            }}
+            .training-input-spacer {{
+                height: 0.12rem;
+            }}
+            div[data-testid="stHorizontalBlock"]:has([class*="st-key-training_cell_"]) {{
+                align-items: end;
+                margin-bottom: 0 !important;
+            }}
+            div[data-testid="stHorizontalBlock"]:has([class*="st-key-training_cell_"]) [data-testid="stColumn"] {{
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+            }}
+            [class*="st-key-training_cell_"] {{
+                margin-bottom: 0 !important;
+            }}
+            [class*="st-key-training_cell_"] [data-testid="stTextInput"] {{
+                margin-bottom: 0 !important;
+            }}
+            [class*="st-key-training_cell_"] label {{
+                display: none !important;
+            }}
+            [class*="st-key-training_cell_"] > div {{
+                background: transparent !important;
+                padding: 0 0 0.02rem;
+                border-bottom: 1px solid rgba(17, 17, 17, 0.12);
+                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            }}
+            [class*="st-key-training_cell_"] > div:focus-within {{
+                border-bottom-color: #c1121f;
+                box-shadow: inset 0 -2px 0 #c1121f;
+            }}
+            [class*="st-key-training_cell_"] [data-testid="stTextInputRootElement"],
+            [class*="st-key-training_cell_"] [data-testid="stTextInputRootElement"] > div,
+            [class*="st-key-training_cell_"] [data-testid="stTextInputRootElement"] > div > div,
+            [class*="st-key-training_cell_"] [data-baseweb="base-input"] {{
+                background: #ffffff !important;
+                border-radius: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                min-height: 0 !important;
+            }}
+            [class*="st-key-training_cell_"] [data-testid="stTextInputRootElement"] * {{
+                color: #111111 !important;
+            }}
+            [class*="st-key-training_cell_"] input {{
+                background: #ffffff !important;
+                color: #111111 !important;
+                caret-color: #c1121f !important;
+                border: none !important;
+                font-size: 0.98rem !important;
+                font-weight: 600 !important;
+                padding: 0 0.25rem !important;
+                min-height: 1.2rem !important;
+                line-height: 1.15 !important;
+            }}
+            [class*="st-key-training_cell_"] input::placeholder {{
+                color: #8a8a8a !important;
+            }}
         </style>
         <div class="training-roadmap">
             <h3 class="training-roadmap-section-title">Training Vision</h3>
@@ -802,8 +1089,44 @@ def render_training_roadmap(section: dict) -> None:
                 {cards_html}
             </div>
         </div>
+        <div class="training-table-card">
+            <div class="training-table-header">Intended Upcoming Client Training List</div>
+            <div class="training-table-caption">Press Enter after editing a cell to save it. Your changes stay after a refresh.</div>
+        </div>
         """
     )
+
+    training_df = get_training_table().reset_index(drop=True)
+    table_widths = [2.2, 1.15, 1.2, 1.45, 1.0]
+    header_cols = st.columns(table_widths, gap="small")
+    for col, heading in zip(header_cols, TRAINING_TABLE_COLUMNS):
+        with col:
+            render_html(f'<div class="training-input-headcell">{html.escape(heading)}</div>')
+
+    for row_index, row in training_df.iterrows():
+        row_cols = st.columns(table_widths, gap="small")
+        for col, field in zip(row_cols, TRAINING_TABLE_COLUMNS):
+            cell_key = training_cell_key(row_index, field)
+            if cell_key not in st.session_state:
+                st.session_state[cell_key] = str(row[field]) if pd.notna(row[field]) else ""
+            with col:
+                st.text_input(
+                    field,
+                    key=cell_key,
+                    label_visibility="collapsed",
+                    placeholder="",
+                )
+        render_html('<div class="training-input-spacer"></div>')
+
+    updated_training_rows = []
+    for row_index in range(len(training_df)):
+        updated_training_rows.append(
+            {
+                field: st.session_state.get(training_cell_key(row_index, field), "")
+                for field in TRAINING_TABLE_COLUMNS
+            }
+        )
+    persist_training_table(pd.DataFrame(updated_training_rows, columns=TRAINING_TABLE_COLUMNS))
 
     with st.expander("Training Roadmap In Motion", expanded=False):
         render_html(
@@ -1030,26 +1353,27 @@ def render_pipeline_landscape(section: dict) -> None:
             .pipeline-stage {{
                 position: relative;
                 border-radius: 28px;
-                padding: 1.1rem 1.2rem 1.4rem;
+                padding: 1.2rem 1.3rem 1.5rem;
                 background:
-                    radial-gradient(circle at 12% 10%, rgba(193, 18, 31, 0.12), transparent 42%),
-                    radial-gradient(circle at 88% 6%, rgba(17, 17, 17, 0.08), transparent 40%),
-                    #ffffff;
-                border: 1px solid rgba(17, 17, 17, 0.16);
-                box-shadow: 0 20px 34px rgba(17, 17, 17, 0.08);
+                    radial-gradient(circle at 12% 10%, rgba(193, 18, 31, 0.08), transparent 42%),
+                    radial-gradient(circle at 88% 6%, rgba(17, 17, 17, 0.05), transparent 40%),
+                    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(247, 247, 247, 0.98) 100%);
+                border: 1px solid rgba(17, 17, 17, 0.1);
+                box-shadow: 0 22px 40px rgba(17, 17, 17, 0.08);
             }}
             .pipeline-table-edit .stButton > button {{
-                background: #111111;
-                color: #ffffff;
+                background: #ffffff;
+                color: #111111;
                 border-radius: 999px;
-                padding: 0.65rem 1.4rem;
-                border: 2px solid #111111;
-                font-weight: 800;
+                padding: 0.5rem 1rem;
+                border: 1px solid rgba(17, 17, 17, 0.14);
+                font-weight: 700;
+                box-shadow: 0 10px 22px rgba(17, 17, 17, 0.06);
             }}
             .pipeline-table-edit .stButton > button:hover {{
-                background: #c1121f;
+                background: #ffffff;
                 border-color: #c1121f;
-                color: #ffffff;
+                color: #c1121f;
             }}
             .pipeline-priority {{
                 margin-top: 1rem;
@@ -1074,182 +1398,134 @@ def render_pipeline_landscape(section: dict) -> None:
                 line-height: 1.4;
                 color: #222222;
             }}
-            div[data-testid="stDataEditor"],
-            div[data-testid="stDataFrame"],
-            .stDataEditor,
-            .stDataFrame {{
-                border: 2px solid #c1121f !important;
-                border-radius: 20px !important;
-                overflow: hidden !important;
-                background: #ffffff !important;
-                box-shadow: 0 18px 30px rgba(17, 17, 17, 0.1) !important;
-                max-width: 980px;
-                margin: 0 auto;
-                --dataframe-header-background-color: #111111;
-                --dataframe-header-text-color: #ffffff;
-                --dataframe-row-border-color: rgba(193, 18, 31, 0.35);
-                --dataframe-row-hover-background-color: rgba(193, 18, 31, 0.16);
-                --dataframe-row-background-color: #ffffff;
-                --dataframe-row-alt-background-color: rgba(193, 18, 31, 0.08);
-                --dataframe-text-color: #111111;
-                --dataframe-border-color: rgba(193, 18, 31, 0.35);
-            }}
-            div[data-testid="stDataEditor"] [role="grid"],
-            div[data-testid="stDataFrame"] [role="grid"],
-            .stDataEditor [role="grid"],
-            .stDataFrame [role="grid"] {{
-                width: 100% !important;
-            }}
-            div[data-testid="stDataEditor"] [role="columnheader"],
-            div[data-testid="stDataFrame"] [role="columnheader"],
-            .stDataEditor [role="columnheader"],
-            .stDataFrame [role="columnheader"] {{
-                min-width: 0 !important;
-                max-width: 1px !important;
-            }}
-            div[data-testid="stDataEditor"] [role="gridcell"],
-            div[data-testid="stDataFrame"] [role="gridcell"],
-            .stDataEditor [role="gridcell"],
-            .stDataFrame [role="gridcell"] {{
-                min-width: 0 !important;
-                max-width: 1px !important;
-            }}
-            div[data-testid="stDataEditor"] [role="grid"] div,
-            div[data-testid="stDataFrame"] [role="grid"] div,
-            .stDataEditor [role="grid"] div,
-            .stDataFrame [role="grid"] div {{
-                min-width: 0 !important;
-            }}
-            div[data-testid="stDataEditor"] [role="grid"],
-            div[data-testid="stDataFrame"] [role="grid"],
-            .stDataEditor [role="grid"],
-            .stDataFrame [role="grid"] {{
-                overflow-x: hidden !important;
-            }}
-            div[data-testid="stDataEditor"] [role="columnheader"],
-            div[data-testid="stDataFrame"] [role="columnheader"],
-            div[data-testid="stDataEditor"] [role="gridcell"],
-            div[data-testid="stDataFrame"] [role="gridcell"],
-            .stDataEditor [role="columnheader"],
-            .stDataFrame [role="columnheader"],
-            .stDataEditor [role="gridcell"],
-            .stDataFrame [role="gridcell"] {{
-                white-space: normal !important;
-                word-break: break-word !important;
-            }}
-            div[data-testid="stDataEditor"] [role="gridcell"] > div,
-            div[data-testid="stDataFrame"] [role="gridcell"] > div,
-            .stDataEditor [role="gridcell"] > div,
-            .stDataFrame [role="gridcell"] > div {{
-                white-space: normal !important;
-                word-break: break-word !important;
-            }}
-            div[data-testid="stDataEditor"] [role="grid"],
-            div[data-testid="stDataFrame"] [role="grid"],
-            .stDataEditor [role="grid"],
-            .stDataFrame [role="grid"] {{
-                border: 0 !important;
-            }}
-            div[data-testid="stDataEditor"] [role="columnheader"],
-            div[data-testid="stDataFrame"] [role="columnheader"],
-            .stDataEditor [role="columnheader"],
-            .stDataFrame [role="columnheader"] {{
-                background: linear-gradient(180deg, #111111 0%, #1f1f1f 100%) !important;
-                color: #ffffff !important;
-                border-color: rgba(193, 18, 31, 0.6) !important;
-                font-weight: 800 !important;
-                letter-spacing: 0.01em !important;
-                box-shadow: inset 0 -2px 0 rgba(193, 18, 31, 0.85);
-            }}
-            div[data-testid="stDataEditor"] [role="columnheader"] *,
-            div[data-testid="stDataFrame"] [role="columnheader"] *,
-            .stDataEditor [role="columnheader"] *,
-            .stDataFrame [role="columnheader"] * {{
-                color: #ffffff !important;
-            }}
-            div[data-testid="stDataEditor"] [role="columnheader"] svg,
-            div[data-testid="stDataFrame"] [role="columnheader"] svg,
-            .stDataEditor [role="columnheader"] svg,
-            .stDataFrame [role="columnheader"] svg {{
-                fill: #ffffff !important;
-            }}
-            div[data-testid="stDataEditor"] [role="gridcell"],
-            div[data-testid="stDataFrame"] [role="gridcell"],
-            .stDataEditor [role="gridcell"],
-            .stDataFrame [role="gridcell"] {{
+            [class*="st-key-pipeline_add_row"] button,
+            [class*="st-key-pipeline_remove_row"] button {{
                 background: #ffffff !important;
                 color: #111111 !important;
-                border-color: rgba(193, 18, 31, 0.35) !important;
-            }}
-            div[data-testid="stDataEditor"] [role="row"]:nth-child(even) [role="gridcell"],
-            div[data-testid="stDataFrame"] [role="row"]:nth-child(even) [role="gridcell"],
-            .stDataEditor [role="row"]:nth-child(even) [role="gridcell"],
-            .stDataFrame [role="row"]:nth-child(even) [role="gridcell"] {{
-                background: rgba(193, 18, 31, 0.18) !important;
-            }}
-            div[data-testid="stDataEditor"] [role="row"]:hover [role="gridcell"],
-            div[data-testid="stDataFrame"] [role="row"]:hover [role="gridcell"],
-            .stDataEditor [role="row"]:hover [role="gridcell"],
-            .stDataFrame [role="row"]:hover [role="gridcell"] {{
-                background: rgba(193, 18, 31, 0.28) !important;
-            }}
-            div[data-testid="stDataEditor"] [role="row"]:nth-child(even),
-            div[data-testid="stDataFrame"] [role="row"]:nth-child(even),
-            .stDataEditor [role="row"]:nth-child(even),
-            .stDataFrame [role="row"]:nth-child(even) {{
-                background: rgba(193, 18, 31, 0.18) !important;
-            }}
-            div[data-testid="stDataEditor"] [role="row"]:hover,
-            div[data-testid="stDataFrame"] [role="row"]:hover,
-            .stDataEditor [role="row"]:hover,
-            .stDataFrame [role="row"]:hover {{
-                background: rgba(193, 18, 31, 0.28) !important;
-            }}
-            div[data-testid="stDataEditor"] [role="gridcell"][aria-selected="true"],
-            div[data-testid="stDataFrame"] [role="gridcell"][aria-selected="true"],
-            .stDataEditor [role="gridcell"][aria-selected="true"],
-            .stDataFrame [role="gridcell"][aria-selected="true"] {{
-                outline: 2px solid #c1121f !important;
-                box-shadow: inset 0 0 0 2px rgba(193, 18, 31, 0.25) !important;
-                background: #ffffff !important;
-            }}
-            div[data-testid="stDataEditor"] [role="gridcell"]:focus,
-            div[data-testid="stDataFrame"] [role="gridcell"]:focus,
-            .stDataEditor [role="gridcell"]:focus,
-            .stDataFrame [role="gridcell"]:focus {{
-                outline: 2px solid #c1121f !important;
-                outline-offset: -2px !important;
-            }}
-            div[data-testid="stDataEditor"] [role="gridcell"] a,
-            div[data-testid="stDataFrame"] [role="gridcell"] a,
-            .stDataEditor [role="gridcell"] a,
-            .stDataFrame [role="gridcell"] a {{
-                color: #c1121f !important;
+                border-radius: 999px !important;
+                border: 1px solid rgba(17, 17, 17, 0.14) !important;
+                box-shadow: 0 10px 22px rgba(17, 17, 17, 0.06) !important;
                 font-weight: 700 !important;
+                min-height: 2.75rem !important;
+                padding: 0.55rem 1.1rem !important;
+                white-space: nowrap !important;
             }}
-            div[data-testid="stDataEditor"] table,
-            div[data-testid="stDataFrame"] table {{
-                border-collapse: collapse !important;
+            [class*="st-key-pipeline_add_row"] button:hover,
+            [class*="st-key-pipeline_remove_row"] button:hover {{
+                border-color: #c1121f !important;
+                color: #c1121f !important;
             }}
-            div[data-testid="stDataEditor"] thead tr th,
-            div[data-testid="stDataFrame"] thead tr th {{
-                background: #111111 !important;
-                color: #ffffff !important;
-                border-bottom: 2px solid #c1121f !important;
+            div[data-testid="stHorizontalBlock"]:has([class*="st-key-pipeline_add_row"]) {{
+                align-items: center;
+                margin: 0.2rem 0 0.9rem !important;
             }}
-            div[data-testid="stDataEditor"] tbody tr td,
-            div[data-testid="stDataFrame"] tbody tr td {{
+            div[data-testid="stHorizontalBlock"]:has(.pipeline-input-headcell) {{
+                padding: 0 0.35rem;
+                margin-bottom: 0.35rem !important;
+            }}
+            .pipeline-input-headcell {{
+                padding: 0 0.25rem 0.15rem;
+                color: #666666;
+                font-size: 0.8rem;
+                font-weight: 800;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                margin-bottom: 0.02rem;
+            }}
+            .pipeline-input-spacer {{
+                height: 0.45rem;
+            }}
+            div[data-testid="stHorizontalBlock"]:has([class*="st-key-pipeline_cell_"]) {{
+                align-items: start;
+                margin-bottom: 0 !important;
+                padding: 0.65rem 0.7rem 0.58rem;
+                border-radius: 24px;
+                border: 1px solid rgba(17, 17, 17, 0.08);
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(250, 250, 250, 0.98) 100%);
+                box-shadow: 0 14px 28px rgba(17, 17, 17, 0.05);
+                transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+            }}
+            div[data-testid="stHorizontalBlock"]:has([class*="st-key-pipeline_cell_"]):hover {{
+                transform: translateY(-1px);
+                border-color: rgba(193, 18, 31, 0.2);
+                box-shadow: 0 18px 30px rgba(17, 17, 17, 0.08);
+            }}
+            div[data-testid="stHorizontalBlock"]:has([class*="st-key-pipeline_cell_"]) [data-testid="stColumn"] {{
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+            }}
+            [class*="st-key-pipeline_cell_"] {{
+                margin-bottom: 0 !important;
+            }}
+            [class*="st-key-pipeline_cell_"] [data-testid="stTextInput"] {{
+                margin-bottom: 0 !important;
+            }}
+            [class*="st-key-pipeline_cell_"] [data-testid="stTextArea"] {{
+                margin-bottom: 0 !important;
+            }}
+            [class*="st-key-pipeline_cell_"] label {{
+                display: none !important;
+            }}
+            [class*="st-key-pipeline_cell_"] > div {{
+                background: #ffffff !important;
+                padding: 0.16rem 0.3rem !important;
+                border: 1px solid rgba(17, 17, 17, 0.08);
+                border-radius: 16px;
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 8px 16px rgba(17, 17, 17, 0.04);
+                transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+            }}
+            [class*="st-key-pipeline_cell_"] > div:focus-within {{
+                border-color: rgba(193, 18, 31, 0.45);
+                box-shadow: 0 12px 24px rgba(193, 18, 31, 0.12), inset 0 0 0 1px rgba(193, 18, 31, 0.28);
+                transform: translateY(-1px);
+            }}
+            [class*="st-key-pipeline_cell_"] [data-testid="stTextInputRootElement"],
+            [class*="st-key-pipeline_cell_"] [data-testid="stTextInputRootElement"] > div,
+            [class*="st-key-pipeline_cell_"] [data-testid="stTextInputRootElement"] > div > div,
+            [class*="st-key-pipeline_cell_"] [data-baseweb="base-input"],
+            [class*="st-key-pipeline_cell_"] [data-baseweb="textarea"] {{
+                background: #ffffff !important;
+                border-radius: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                min-height: 0 !important;
+            }}
+            [class*="st-key-pipeline_cell_"] [data-testid="stTextInputRootElement"] * {{
+                color: #111111 !important;
+            }}
+            [class*="st-key-pipeline_cell_"] input {{
                 background: #ffffff !important;
                 color: #111111 !important;
-                border-bottom: 1px solid rgba(193, 18, 31, 0.3) !important;
+                caret-color: #c1121f !important;
+                border: none !important;
+                font-size: 0.95rem !important;
+                font-weight: 600 !important;
+                padding: 0.08rem 0.1rem !important;
+                min-height: 1.55rem !important;
+                line-height: 1.25 !important;
             }}
-            div[data-testid="stDataEditor"] tbody tr:nth-child(even) td,
-            div[data-testid="stDataFrame"] tbody tr:nth-child(even) td {{
-                background: rgba(193, 18, 31, 0.08) !important;
+            [class*="st-key-pipeline_cell_"] textarea {{
+                background: #ffffff !important;
+                color: #111111 !important;
+                caret-color: #c1121f !important;
+                border: none !important;
+                font-size: 0.94rem !important;
+                font-weight: 600 !important;
+                padding: 0.14rem 0.1rem !important;
+                min-height: 0 !important;
+                line-height: 1.35 !important;
+                resize: vertical !important;
             }}
-            div[data-testid="stDataEditor"] tbody tr:hover td,
-            div[data-testid="stDataFrame"] tbody tr:hover td {{
-                background: rgba(193, 18, 31, 0.16) !important;
+            [class*="st-key-pipeline_cell_"][class*="_client"] textarea,
+            [class*="st-key-pipeline_cell_"][class*="_responsible_person"] textarea {{
+                line-height: 1.25 !important;
+            }}
+            [class*="st-key-pipeline_cell_"] input::placeholder {{
+                color: #8a8a8a !important;
+            }}
+            [class*="st-key-pipeline_cell_"] textarea::placeholder {{
+                color: #8a8a8a !important;
             }}
             @media (max-width: 1080px) {{
                 .pipeline-priority-grid {{
@@ -1260,65 +1536,92 @@ def render_pipeline_landscape(section: dict) -> None:
         """
     )
 
-    _, main_col, _ = st.columns([1, 3, 1], gap="large")
+    _, main_col, _ = st.columns([0.2, 5.6, 0.2], gap="large")
     with main_col:
         render_html('<div class="pipeline-stage">')
         render_html(
             """
             <div class="pipeline-main-head">
-                <h4>Opportunity Tracker</h4>
+                <h4>Plan to make plan</h4>
             </div>
             """
         )
 
-        if "pipeline_saved" not in st.session_state:
-            st.session_state.pipeline_saved = False
+        st.caption("Changes save after you finish editing a field. Your changes stay after a refresh.")
 
-        if st.session_state.pipeline_saved:
-            st.success("Changes saved.")
-            st.session_state.pipeline_saved = False
-
-        table_rows = get_pipeline_table()
         columns = [
             ("client", "Client"),
             ("income", "Income"),
-            ("progress", "Progress"),
             ("estimated_placement", "Estimated Placement Dates"),
             ("comments", "Comments"),
             ("responsible_person", "Responsible Person"),
         ]
+        table_df = get_pipeline_table().reset_index(drop=True)
 
-        with st.form("pipeline_editor_form", clear_on_submit=False):
-            table_df = pd.DataFrame(table_rows)
-            edited_df = st.data_editor(
-                table_df,
-                hide_index=True,
-                use_container_width=True,
-                num_rows="fixed",
-                column_order=[col for col, _ in columns],
-                column_config={
-                    "client": st.column_config.TextColumn("Client"),
-                    "income": st.column_config.TextColumn(
-                        "Income",
-                        help="Enter premium/fee or keep TBD.",
-                    ),
-                    "progress": st.column_config.TextColumn("Progress"),
-                    "estimated_placement": st.column_config.TextColumn(
-                        "Estimated Placement Dates",
-                        help="Enter date/time when available (e.g., 2026-03-21 14:00).",
-                    ),
-                    "comments": st.column_config.TextColumn("Comments"),
-                    "responsible_person": st.column_config.TextColumn("Responsible Person"),
-                },
-                disabled=["client", "progress", "comments", "responsible_person"],
-                height=420,
-                key="pipeline_editor",
+        action_cols = st.columns([1.15, 1.4, 5.45], gap="small")
+        with action_cols[0]:
+            if st.button("Add Row", key="pipeline_add_row"):
+                new_row = {field: "" for field, _ in columns}
+                updated_df = pd.concat([table_df, pd.DataFrame([new_row])], ignore_index=True)
+                persist_pipeline_table(updated_df)
+                for field, _ in columns:
+                    st.session_state[pipeline_cell_key(len(updated_df) - 1, field)] = ""
+                st.rerun()
+        with action_cols[1]:
+            if st.button("Remove Last", key="pipeline_remove_row", disabled=len(table_df) <= 1):
+                last_row_index = len(table_df) - 1
+                for field, _ in columns:
+                    st.session_state.pop(pipeline_cell_key(last_row_index, field), None)
+                persist_pipeline_table(table_df.iloc[:-1].reset_index(drop=True))
+                st.rerun()
+
+        table_widths = [1.95, 1.15, 1.15, 3.0, 1.45]
+        header_cols = st.columns(table_widths, gap="small")
+        for col, (_, heading) in zip(header_cols, columns):
+            with col:
+                render_html(f'<div class="pipeline-input-headcell">{html.escape(heading)}</div>')
+
+        for row_index, row in table_df.iterrows():
+            row_cols = st.columns(table_widths, gap="small")
+            for col, (field, heading) in zip(row_cols, columns):
+                cell_key = pipeline_cell_key(row_index, field)
+                if cell_key not in st.session_state:
+                    st.session_state[cell_key] = str(row[field]) if pd.notna(row[field]) else ""
+                with col:
+                    if field == "comments":
+                        st.text_area(
+                            heading,
+                            key=cell_key,
+                            label_visibility="collapsed",
+                            placeholder="",
+                            height=96,
+                        )
+                    elif field in {"client", "responsible_person"}:
+                        st.text_area(
+                            heading,
+                            key=cell_key,
+                            label_visibility="collapsed",
+                            placeholder="",
+                            height=68,
+                        )
+                    else:
+                        st.text_input(
+                            heading,
+                            key=cell_key,
+                            label_visibility="collapsed",
+                            placeholder="",
+                        )
+            render_html('<div class="pipeline-input-spacer"></div>')
+
+        updated_pipeline_rows = []
+        for row_index in range(len(table_df)):
+            updated_pipeline_rows.append(
+                {
+                    field: st.session_state.get(pipeline_cell_key(row_index, field), "")
+                    for field, _ in columns
+                }
             )
-            save_changes = st.form_submit_button("Save changes")
-        if save_changes:
-            st.session_state.pipeline_table = edited_df.to_dict(orient="records")
-            st.session_state.pipeline_saved = True
-            st.rerun()
+        persist_pipeline_table(pd.DataFrame(updated_pipeline_rows, columns=PIPELINE_COLUMNS))
 
         render_html(
             f"""
@@ -1948,7 +2251,7 @@ render_html(
     f'<div class="{intro_card_class}">'
     f"{logo_markup}"
     f'<div class="intro-copy">'
-    f"<h1>Mining War Room</h1>"
+    f"<h1>Mining War Room Report</h1>"
     f'<div class="intro-divider"></div>'
     f'<div class="intro-pill-row">'
     f'<span class="intro-pill">Client Engagement</span>'
@@ -1991,3 +2294,4 @@ else:
         if st.button("Next", type="tertiary", disabled=current_index == len(SECTION_ORDER) - 1):
             st.session_state.selected_section = SECTION_ORDER[current_index + 1]
             st.rerun()
+
