@@ -547,14 +547,113 @@ def show_approach_dialog() -> None:
         with right:
             if idx == 0:
                 with st.popover("View List", use_container_width=True):
-                    st.markdown("**Initial invitation sent to 17 clients**")
-                    st.caption("Press Enter after editing a cell to save it. Your changes stay after a refresh.")
+                    render_html(
+                        """
+                        <style>
+                            div[data-baseweb="popover"]:has(.st-key-outreach_table_editor) {
+                                background: #ffffff !important;
+                                border: 1px solid rgba(17, 17, 17, 0.1) !important;
+                                border-radius: 28px !important;
+                                box-shadow: 0 26px 46px rgba(17, 17, 17, 0.16) !important;
+                            }
+                            div[data-baseweb="popover"]:has(.st-key-outreach_table_editor) > div {
+                                background: transparent !important;
+                            }
+                            .outreach-popover-head {
+                                padding: 0.15rem 0.15rem 0.65rem;
+                            }
+                            .outreach-popover-kicker {
+                                text-transform: uppercase;
+                                letter-spacing: 0.14em;
+                                font-size: 0.72rem;
+                                font-weight: 800;
+                                color: #c1121f;
+                                margin-bottom: 0.35rem;
+                            }
+                            .outreach-popover-title {
+                                font-size: 1.2rem;
+                                font-weight: 800;
+                                color: #111111;
+                                line-height: 1.12;
+                                margin-bottom: 0.3rem;
+                            }
+                            .outreach-popover-caption {
+                                font-size: 0.95rem;
+                                line-height: 1.35;
+                                color: #5a5a5a;
+                            }
+                            .st-key-outreach_table_editor,
+                            .st-key-outreach_table_editor div[data-testid="stDataEditor"],
+                            .st-key-outreach_table_editor .stDataEditor {
+                                background: #ffffff !important;
+                                border: 1px solid rgba(17, 17, 17, 0.1) !important;
+                                border-radius: 22px !important;
+                                overflow: hidden !important;
+                                box-shadow: 0 16px 28px rgba(17, 17, 17, 0.08) !important;
+                            }
+                            .st-key-outreach_table_editor [role="columnheader"],
+                            .st-key-outreach_table_editor div[data-testid="stDataEditor"] [role="columnheader"],
+                            .st-key-outreach_table_editor .stDataEditor [role="columnheader"] {
+                                background: linear-gradient(180deg, #fafafa 0%, #f2f2f2 100%) !important;
+                                color: #111111 !important;
+                                border-color: rgba(17, 17, 17, 0.08) !important;
+                                font-weight: 800 !important;
+                                box-shadow: inset 0 -2px 0 rgba(193, 18, 31, 0.5);
+                            }
+                            .st-key-outreach_table_editor [role="columnheader"] *,
+                            .st-key-outreach_table_editor div[data-testid="stDataEditor"] [role="columnheader"] *,
+                            .st-key-outreach_table_editor .stDataEditor [role="columnheader"] * {
+                                color: #111111 !important;
+                            }
+                            .st-key-outreach_table_editor [role="columnheader"] svg,
+                            .st-key-outreach_table_editor div[data-testid="stDataEditor"] [role="columnheader"] svg,
+                            .st-key-outreach_table_editor .stDataEditor [role="columnheader"] svg {
+                                fill: #111111 !important;
+                            }
+                            .st-key-outreach_table_editor [role="gridcell"],
+                            .st-key-outreach_table_editor div[data-testid="stDataEditor"] [role="gridcell"],
+                            .st-key-outreach_table_editor .stDataEditor [role="gridcell"] {
+                                background: #ffffff !important;
+                                color: #111111 !important;
+                                border-color: rgba(17, 17, 17, 0.08) !important;
+                            }
+                            .st-key-outreach_table_editor [role="row"]:nth-child(even) [role="gridcell"],
+                            .st-key-outreach_table_editor div[data-testid="stDataEditor"] [role="row"]:nth-child(even) [role="gridcell"],
+                            .st-key-outreach_table_editor .stDataEditor [role="row"]:nth-child(even) [role="gridcell"] {
+                                background: rgba(193, 18, 31, 0.04) !important;
+                            }
+                            .st-key-outreach_table_editor [role="row"]:hover [role="gridcell"],
+                            .st-key-outreach_table_editor div[data-testid="stDataEditor"] [role="row"]:hover [role="gridcell"],
+                            .st-key-outreach_table_editor .stDataEditor [role="row"]:hover [role="gridcell"] {
+                                background: rgba(193, 18, 31, 0.08) !important;
+                            }
+                            .st-key-outreach_table_editor [role="gridcell"][aria-selected="true"],
+                            .st-key-outreach_table_editor div[data-testid="stDataEditor"] [role="gridcell"][aria-selected="true"],
+                            .st-key-outreach_table_editor .stDataEditor [role="gridcell"][aria-selected="true"] {
+                                outline: 2px solid #c1121f !important;
+                                box-shadow: inset 0 0 0 2px rgba(193, 18, 31, 0.18) !important;
+                            }
+                            .st-key-outreach_table_editor table,
+                            .st-key-outreach_table_editor div[data-testid="stDataEditor"] table,
+                            .st-key-outreach_table_editor .stDataEditor table {
+                                border-collapse: collapse !important;
+                            }
+                        </style>
+                        <div class="outreach-popover-head">
+                            <div class="outreach-popover-kicker">Outreach List</div>
+                            <div class="outreach-popover-title">Initial invitation sent to 17 clients</div>
+                            <div class="outreach-popover-caption">Press Enter after editing a cell to save it. Your changes stay after a refresh.</div>
+                        </div>
+                        """
+                    )
                     edited_outreach = st.data_editor(
                         get_outreach_table(),
                         key="outreach_table_editor",
                         use_container_width=True,
                         hide_index=True,
                         num_rows="dynamic",
+                        row_height=38,
+                        height=420,
                         column_config={
                             "Client": st.column_config.TextColumn("Client", width="medium"),
                             "Activity": st.column_config.TextColumn("Activity", width="medium"),
