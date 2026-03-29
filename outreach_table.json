@@ -1,0 +1,122 @@
+﻿[
+    {
+        "Client":  "Redpath",
+        "Activity":  "Helo",
+        "Invitation Date":  "26 Feb 2026",
+        "Activity Date":  "vc",
+        "Cross Selling":  "",
+        "Status":  "Complete"
+    },
+    {
+        "Client":  "Okavango Diamond",
+        "Activity":  "Initial invitation",
+        "Invitation Date":  "26 Feb 2026",
+        "Activity Date":  "",
+        "Cross Selling":  "",
+        "Status":  "OK"
+    },
+    {
+        "Client":  "BotAsh",
+        "Activity":  "Initial invitation",
+        "Invitation Date":  "26 Feb 2026",
+        "Activity Date":  "",
+        "Cross Selling":  "",
+        "Status":  "Complete"
+    },
+    {
+        "Client":  "Letshego Africa",
+        "Activity":  "Initial invitation",
+        "Invitation Date":  "26 Feb 2026",
+        "Activity Date":  "",
+        "Cross Selling":  "",
+        "Status":  "Complete"
+    },
+    {
+        "Client":  "Air Liquide",
+        "Activity":  "Initial invitation",
+        "Invitation Date":  "26 Feb 2026",
+        "Activity Date":  "",
+        "Cross Selling":  "",
+        "Status":  "Take action urgently"
+    },
+    {
+        "Client":  "Botswana Oxygen",
+        "Activity":  "Initial invitation",
+        "Invitation Date":  "26 Feb 2026",
+        "Activity Date":  "",
+        "Cross Selling":  "",
+        "Status":  "Warning"
+    },
+    {
+        "Client":  "Final Energy Botswana",
+        "Activity":  "Initial invitation",
+        "Invitation Date":  "26 Feb 2026",
+        "Activity Date":  "",
+        "Cross Selling":  "",
+        "Status":  "OK"
+    },
+    {
+        "Client":  "Francistown Academic Hospital",
+        "Activity":  "Initial invitation",
+        "Invitation Date":  "26 Feb 2026",
+        "Activity Date":  "",
+        "Cross Selling":  "",
+        "Status":  "Take action urgently"
+    },
+    {
+        "Client":  "GH Group",
+        "Activity":  "Initial invitation",
+        "Invitation Date":  "26 Feb 2026",
+        "Activity Date":  "",
+        "Cross Selling":  "",
+        "Status":  "Warning"
+    },
+    {
+        "Client":  "Genesis HB Botswana",
+        "Activity":  "Initial invitation",
+        "Invitation Date":  "26 Feb 2026",
+        "Activity Date":  "",
+        "Cross Selling":  "",
+        "Status":  "Complete"
+    },
+    {
+        "Client":  "Mitchell Drilling Services",
+        "Activity":  "Initial invitation",
+        "Invitation Date":  "26 Feb 2026",
+        "Activity Date":  "",
+        "Cross Selling":  "",
+        "Status":  "Warning"
+    },
+    {
+        "Client":  "Minergy",
+        "Activity":  "Initial invitation",
+        "Invitation Date":  "26 Feb 2026",
+        "Activity Date":  "",
+        "Cross Selling":  "",
+        "Status":  "OK"
+    },
+    {
+        "Client":  "SDDS",
+        "Activity":  "Initial invitation",
+        "Invitation Date":  "26 Feb 2026",
+        "Activity Date":  "",
+        "Cross Selling":  "",
+        "Status":  "OK"
+    },
+    {
+        "Client":  "BG Motors",
+        "Activity":  "Initial invitation",
+        "Invitation Date":  "26 Feb 2026",
+        "Activity Date":  "",
+        "Cross Selling":  "",
+        "Status":  "Complete"
+    },
+    {
+        "Client":  "",
+        "Activity":  "",
+        "Invitation Date":  "",
+        "Activity Date":  "",
+        "Cross Selling":  "",
+        "Status":  ""
+    }
+]
