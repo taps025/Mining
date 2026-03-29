@@ -125,7 +125,7 @@ LEGACY_TRAINING_DATA_PATH = LEGACY_DATA_DIR / "training_table.csv"
 LEGACY_PIPELINE_DATA_PATH = LEGACY_DATA_DIR / "pipeline_table.csv"
 OUTREACH_STATUS = [
     {
-        "Client": "Redpaths",
+        "Client": "Redpath",
         "Activity": "Initial invitation",
         "Invitation Date": "26 Feb 2026",
         "Activity Date": "",
@@ -387,21 +387,40 @@ def normalize_table(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
     return normalized[columns].fillna("")
 
 
+def load_json_table(file_path: Path, columns: list[str]) -> pd.DataFrame | None:
+    if not file_path.exists():
+        return None
+
+    try:
+        # `utf-8-sig` also handles UTF-8 files saved with a BOM.
+        stored_rows = json.loads(file_path.read_text(encoding="utf-8-sig"))
+        if isinstance(stored_rows, dict):
+            stored_rows = stored_rows.get("rows", [])
+        stored_df = pd.DataFrame(stored_rows)
+        return normalize_table(stored_df, columns)
+    except Exception:
+        return None
+
+
 def load_table(
     file_path: Path,
     default_rows: list[dict],
     columns: list[str],
     legacy_file_path: Path | None = None,
 ) -> pd.DataFrame:
-    if file_path.exists():
-        try:
-            stored_rows = json.loads(file_path.read_text(encoding="utf-8"))
-            if isinstance(stored_rows, dict):
-                stored_rows = stored_rows.get("rows", [])
-            stored_df = pd.DataFrame(stored_rows)
-            return normalize_table(stored_df, columns)
-        except Exception:
-            pass
+    json_candidates = [file_path]
+    if legacy_file_path is not None:
+        legacy_json_path = legacy_file_path.with_suffix(".json")
+        if legacy_json_path != file_path:
+            json_candidates.append(legacy_json_path)
+
+    for candidate in json_candidates:
+        loaded_json = load_json_table(candidate, columns)
+        if loaded_json is not None:
+            if candidate != file_path:
+                save_table(loaded_json, file_path, columns)
+            return loaded_json
+
     if legacy_file_path and legacy_file_path.exists():
         try:
             stored_df = pd.read_csv(legacy_file_path, dtype=str, keep_default_na=False)
