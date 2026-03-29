@@ -125,7 +125,7 @@ LEGACY_TRAINING_DATA_PATH = LEGACY_DATA_DIR / "training_table.csv"
 LEGACY_PIPELINE_DATA_PATH = LEGACY_DATA_DIR / "pipeline_table.csv"
 OUTREACH_STATUS = [
     {
-        "Client": "Redpath",
+        "Client": "Redpaths",
         "Activity": "Initial invitation",
         "Invitation Date": "26 Feb 2026",
         "Activity Date": "",
