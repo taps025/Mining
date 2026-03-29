@@ -1,4 +1,3 @@
-
 import base64
 import html
 import json
@@ -414,13 +413,24 @@ def load_table(
     return normalize_table(pd.DataFrame(default_rows), columns)
 
 
-def save_table(df: pd.DataFrame, file_path: Path, columns: list[str]) -> pd.DataFrame:
+def save_table(
+    df: pd.DataFrame,
+    file_path: Path,
+    columns: list[str],
+) -> pd.DataFrame:
     normalized = normalize_table(df, columns)
+    file_text = json.dumps(normalized.to_dict(orient="records"), indent=2, ensure_ascii=True)
+    existing_text = None
+    if file_path.exists():
+        try:
+            existing_text = file_path.read_text(encoding="utf-8")
+        except Exception:
+            existing_text = None
+
+    file_changed = existing_text != file_text
     file_path.parent.mkdir(parents=True, exist_ok=True)
-    file_path.write_text(
-        json.dumps(normalized.to_dict(orient="records"), indent=2, ensure_ascii=True),
-        encoding="utf-8",
-    )
+    if file_changed:
+        file_path.write_text(file_text, encoding="utf-8")
     return normalized
 
 
