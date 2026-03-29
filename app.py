@@ -1,5 +1,7 @@
+
 import base64
 import html
+import json
 import textwrap
 from pathlib import Path
 
@@ -8,6 +10,9 @@ import streamlit as st
 
 
 st.set_page_config(page_title="Mining War Room Report", layout="wide")
+
+# Keep persisted files anchored to the app folder so restarts reuse the same data.
+APP_DIR = Path(__file__).resolve().parent
 
 SECTIONS = [
     {
@@ -112,10 +117,13 @@ PIPELINE_COLUMNS = [
     "comments",
     "responsible_person",
 ]
-DATA_DIR = Path("data")
-OUTREACH_DATA_PATH = DATA_DIR / "outreach_table.csv"
-TRAINING_DATA_PATH = DATA_DIR / "training_table.csv"
-PIPELINE_DATA_PATH = DATA_DIR / "pipeline_table.csv"
+LEGACY_DATA_DIR = APP_DIR / "data"
+OUTREACH_DATA_PATH = APP_DIR / "outreach_table.json"
+TRAINING_DATA_PATH = APP_DIR / "training_table.json"
+PIPELINE_DATA_PATH = APP_DIR / "pipeline_table.json"
+LEGACY_OUTREACH_DATA_PATH = LEGACY_DATA_DIR / "outreach_table.csv"
+LEGACY_TRAINING_DATA_PATH = LEGACY_DATA_DIR / "training_table.csv"
+LEGACY_PIPELINE_DATA_PATH = LEGACY_DATA_DIR / "pipeline_table.csv"
 OUTREACH_STATUS = [
     {
         "Client": "Redpath",
@@ -380,11 +388,27 @@ def normalize_table(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
     return normalized[columns].fillna("")
 
 
-def load_table(file_path: Path, default_rows: list[dict], columns: list[str]) -> pd.DataFrame:
+def load_table(
+    file_path: Path,
+    default_rows: list[dict],
+    columns: list[str],
+    legacy_file_path: Path | None = None,
+) -> pd.DataFrame:
     if file_path.exists():
         try:
-            stored_df = pd.read_csv(file_path, dtype=str, keep_default_na=False)
+            stored_rows = json.loads(file_path.read_text(encoding="utf-8"))
+            if isinstance(stored_rows, dict):
+                stored_rows = stored_rows.get("rows", [])
+            stored_df = pd.DataFrame(stored_rows)
             return normalize_table(stored_df, columns)
+        except Exception:
+            pass
+    if legacy_file_path and legacy_file_path.exists():
+        try:
+            stored_df = pd.read_csv(legacy_file_path, dtype=str, keep_default_na=False)
+            normalized = normalize_table(stored_df, columns)
+            save_table(normalized, file_path, columns)
+            return normalized
         except Exception:
             pass
     return normalize_table(pd.DataFrame(default_rows), columns)
@@ -393,7 +417,10 @@ def load_table(file_path: Path, default_rows: list[dict], columns: list[str]) ->
 def save_table(df: pd.DataFrame, file_path: Path, columns: list[str]) -> pd.DataFrame:
     normalized = normalize_table(df, columns)
     file_path.parent.mkdir(parents=True, exist_ok=True)
-    normalized.to_csv(file_path, index=False)
+    file_path.write_text(
+        json.dumps(normalized.to_dict(orient="records"), indent=2, ensure_ascii=True),
+        encoding="utf-8",
+    )
     return normalized
 
 
@@ -416,6 +443,7 @@ def get_pipeline_table() -> pd.DataFrame:
             PIPELINE_DATA_PATH,
             PIPELINE_LEADS_TABLE,
             PIPELINE_COLUMNS,
+            LEGACY_PIPELINE_DATA_PATH,
         )
     pipeline_df = normalize_table(st.session_state.pipeline_table, PIPELINE_COLUMNS)
     restored_df = restore_pipeline_defaults(pipeline_df)
@@ -439,6 +467,7 @@ def get_outreach_table() -> pd.DataFrame:
             OUTREACH_DATA_PATH,
             OUTREACH_STATUS,
             OUTREACH_COLUMNS,
+            LEGACY_OUTREACH_DATA_PATH,
         )
     return normalize_table(st.session_state.outreach_table, OUTREACH_COLUMNS)
 
@@ -449,6 +478,7 @@ def get_training_table() -> pd.DataFrame:
             TRAINING_DATA_PATH,
             TRAINING_CLIENT_TABLE,
             TRAINING_TABLE_COLUMNS,
+            LEGACY_TRAINING_DATA_PATH,
         )
     return normalize_table(st.session_state.training_table, TRAINING_TABLE_COLUMNS)
 
@@ -473,11 +503,12 @@ def pipeline_cell_key(row_index: int, column_name: str) -> str:
     return f"pipeline_cell_{row_index}_{column_name.lower().replace(' ', '_')}"
 
 
-def load_image_base64(path: str) -> str:
+def load_image_base64(path: Path | str) -> str:
     return base64.b64encode(Path(path).read_bytes()).decode("ascii")
 
 
-LOGO_BASE64 = load_image_base64("logo.png") if Path("logo.png").exists() else ""
+LOGO_PATH = APP_DIR / "logo.png"
+LOGO_BASE64 = load_image_base64(LOGO_PATH) if LOGO_PATH.exists() else ""
 
 
 def render_html(html: str) -> None:
@@ -1995,9 +2026,13 @@ render_html(
             border: 2px solid #111111;
             border-radius: 28px;
             background: #ffffff;
+            color: #111111;
             text-align: center;
             line-height: 1.25;
             box-shadow: 0 14px 28px rgba(17, 17, 17, 0.08);
+        }
+        .objective-box strong {
+            color: #111111;
         }
         .objective-box::before {
             content: "";
